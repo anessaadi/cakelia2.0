@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
 import Header from '../components/Header'
 import FriendForm from '../components/FriendForm'
 import { useAuth } from '../lib/AuthContext'
-import { getUserDoc, updateUserTimezone } from '../lib/userDoc'
+import { getUserDoc, updateUserTimezone, deleteUserAccount } from '../lib/userDoc'
 import { subscribeToFriends, addFriend, updateFriend, deleteFriend } from '../lib/friends'
 import { db } from '../lib/firebase'
 
@@ -20,6 +21,7 @@ function formatDate(ts) {
 
 export default function Dashboard() {
   const { user }                    = useAuth()
+  const navigate                    = useNavigate()
   const [profile,   setProfile]     = useState(null)
   const [friends,   setFriends]     = useState([])
   const [messages,  setMessages]    = useState([])
@@ -30,7 +32,9 @@ export default function Dashboard() {
   const [tzValue,   setTzValue]     = useState('')
   const [tzSaving,  setTzSaving]    = useState(false)
   const [error,     setError]       = useState('')
-  const [activeTab, setActiveTab]   = useState('birthdays')
+  const [activeTab,    setActiveTab]    = useState('birthdays')
+  const [deleteAcct,   setDeleteAcct]   = useState(false)
+  const [deletingAcct, setDeletingAcct] = useState(false)
 
   useEffect(() => {
     if (user) getUserDoc(user.uid).then(setProfile).catch(console.error)
@@ -88,6 +92,23 @@ export default function Dashboard() {
       setTzEdit(false)
     } catch (e) { setError(e.message) }
     setTzSaving(false)
+  }
+
+  async function handleDeleteAccount() {
+    setDeletingAcct(true)
+    setError('')
+    try {
+      await deleteUserAccount(user)
+      navigate('/')
+    } catch (e) {
+      if (e.code === 'auth/requires-recent-login') {
+        setError('For security, please log out and log back in before deleting your account.')
+      } else {
+        setError(e.message)
+      }
+      setDeletingAcct(false)
+      setDeleteAcct(false)
+    }
   }
 
   return (
@@ -247,6 +268,39 @@ export default function Dashboard() {
             )}
           </>
         )}
+
+        {/* ── Danger zone ── */}
+        <div className="danger-zone">
+          <h3 className="danger-zone-title">Danger zone</h3>
+          {deleteAcct ? (
+            <div className="danger-confirm">
+              <p>This will permanently delete your account, all your birthday reminders, and cannot be undone.</p>
+              <div className="friend-form-actions">
+                <button
+                  className="btn-contact btn-danger"
+                  onClick={handleDeleteAccount}
+                  disabled={deletingAcct}
+                >
+                  {deletingAcct ? 'Deleting…' : 'Yes, delete everything'}
+                </button>
+                <button
+                  className="btn-contact btn-secondary"
+                  onClick={() => setDeleteAcct(false)}
+                  disabled={deletingAcct}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              className="btn-contact btn-danger"
+              onClick={() => setDeleteAcct(true)}
+            >
+              Delete my account
+            </button>
+          )}
+        </div>
 
       </main>
     </>
