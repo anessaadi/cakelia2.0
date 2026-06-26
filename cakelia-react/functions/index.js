@@ -2,10 +2,11 @@
 
 const { initializeApp }        = require('firebase-admin/app')
 const { getFirestore }         = require('firebase-admin/firestore')
-const { onSchedule }           = require('firebase-functions/v2/scheduler')
-const { onRequest }            = require('firebase-functions/v2/https')
-const { computeDueReminders }  = require('./lib/computeDueReminders.js')
-const { sendReminderEmail }    = require('./lib/mailer.js')
+const { onSchedule }                = require('firebase-functions/v2/scheduler')
+const { onRequest }                 = require('firebase-functions/v2/https')
+const { onDocumentCreated }         = require('firebase-functions/v2/firestore')
+const { computeDueReminders }       = require('./lib/computeDueReminders.js')
+const { sendReminderEmail, sendContactEmail } = require('./lib/mailer.js')
 
 initializeApp()
 const db = getFirestore()
@@ -73,4 +74,20 @@ exports.triggerReminders = onRequest({ cors: false }, async (req, res) => {
   res.send(`Processed ${snap.size} user(s).`)
 })
 
-// Contact trigger — Phase 5
+// ── Contact form trigger ──────────────────────────────────────────────────
+// Fires when a new doc is written to contact_messages by the client.
+// Sends notification email to CONTACT_TO via Resend.
+exports.onContactMessage = onDocumentCreated('contact_messages/{docId}', async event => {
+  const data = event.data.data()
+  if (!data) return
+
+  try {
+    await sendContactEmail({
+      name:    data.name    || '(no name)',
+      email:   data.email   || '(no email)',
+      message: data.message || '(no message)',
+    })
+  } catch (err) {
+    console.error('Failed to send contact email:', err)
+  }
+})

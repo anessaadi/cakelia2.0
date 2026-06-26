@@ -2,36 +2,33 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ── User profile ──────────────────────────────────────────────────────
-    // Only the authenticated owner can read or write their own document.
+    // User profile - only the authenticated owner can read or write their own document.
     match /users/{uid} {
       allow read, write: if request.auth != null && request.auth.uid == uid;
 
-      // ── Friends subcollection ──────────────────────────────────────────
-      // Same owner-only constraint.
+      // Friends subcollection - same owner-only constraint.
       match /friends/{friendId} {
         allow read, write: if request.auth != null && request.auth.uid == uid;
       }
     }
 
-    // ── Mail log ──────────────────────────────────────────────────────────
-    // Written exclusively by Cloud Functions via the Admin SDK.
-    // No client — authenticated or not — may read or write this collection.
+    // Mail log - written exclusively by Cloud Functions via the Admin SDK.
+    // No client (authenticated or not) may read or write this collection.
     match /mail_log/{logId} {
       allow read, write: if false;
     }
 
-    // ── Contact messages ──────────────────────────────────────────────────
-    // Anyone may create a message (the contact form); no one may read,
-    // update, or delete via the client (owner reads in Firebase console).
-    // Implemented fully in Phase 5 — placeholder rule added now so the
-    // collection is protected from the start.
+    // Contact messages - anyone may create (the contact form).
+    // Only users with isAdmin == true on their profile doc may read.
+    // No client may update or delete.
     match /contact_messages/{id} {
       allow create: if true;
-      allow read, update, delete: if false;
+      allow read: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+      allow update, delete: if false;
     }
 
-    // ── Deny everything else ──────────────────────────────────────────────
+    // Deny everything else.
     match /{document=**} {
       allow read, write: if false;
     }

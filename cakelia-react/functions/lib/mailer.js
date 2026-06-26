@@ -43,4 +43,31 @@ async function sendReminderEmail({ toEmail, friendName, kind }) {
   })
 }
 
-module.exports = { sendReminderEmail }
+/**
+ * Sends a contact-form notification email via Resend.
+ * @param {{ name: string, email: string, message: string }} data
+ */
+async function sendContactEmail({ name, email, message }) {
+  const to = process.env.CONTACT_TO
+  if (!to) throw new Error('CONTACT_TO env var is not set')
+
+  // Escape HTML entities to prevent XSS in the email body
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  const msgHtml = esc(message).replace(/\n/g, '<br>')
+
+  await getClient().emails.send({
+    from:     FROM(),
+    to,
+    replyTo:  email,
+    subject:  `[Cakelia] New message from ${name}`,
+    html: `
+      <p><strong>Name:</strong> ${esc(name)}</p>
+      <p><strong>Email:</strong> ${esc(email)}</p>
+      <hr>
+      <p>${msgHtml}</p>
+      ${FOOTER}
+    `,
+  })
+}
+
+module.exports = { sendReminderEmail, sendContactEmail }
