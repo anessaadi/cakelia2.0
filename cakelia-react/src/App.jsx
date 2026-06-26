@@ -14,6 +14,7 @@ import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import ProtectedRoute from './components/ProtectedRoute'
 import CookieNotice from './components/CookieNotice'
+import Footer from './components/Footer'
 
 export default function App() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
         } />
       </Routes>
 
+      <Footer />
       <CookieNotice />
     </>
   )

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Header from '../components/Header'
 import { useAuth } from '../lib/AuthContext'
+import { useNoIndex } from '../lib/useNoIndex'
 
 function friendlyError(code) {
   const map = {
@@ -16,6 +17,7 @@ function friendlyError(code) {
 }
 
 export default function Login() {
+  useNoIndex()
   const { signIn, signInWithGoogle } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail]       = useState('')

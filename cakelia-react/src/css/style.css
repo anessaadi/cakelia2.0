@@ -1583,6 +1583,30 @@ transition: background-color 0.3s ease;
   margin: 0 0 14px; max-width: 480px;
 }
 
+/* -- Site footer ----------------------------------------------------------- */
+.site-footer {
+  margin-top: 80px;
+  padding: 32px 24px;
+  border-top: 1px solid #D1C5F4;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 12px;
+}
+.footer-links a {
+  font-size: 13px;
+  color: #290132;
+  text-decoration: none;
+  transition: border-bottom .2s;
+}
+.footer-links a:hover { border-bottom: 1px solid #290132; }
+.footer-copy { font-size: 11px; color: #aaa; margin: 0; }
+
 /* ── Contact success state ───────────────────────────────────────────────── */
 .contact-success {
   text-align: center;

@@ -4,6 +4,7 @@ import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
 import Header from '../components/Header'
 import FriendForm from '../components/FriendForm'
 import { useAuth } from '../lib/AuthContext'
+import { useNoIndex } from '../lib/useNoIndex'
 import { getUserDoc, updateUserTimezone, deleteUserAccount } from '../lib/userDoc'
 import { subscribeToFriends, addFriend, updateFriend, deleteFriend } from '../lib/friends'
 import { db } from '../lib/firebase'
@@ -20,6 +21,7 @@ function formatDate(ts) {
 }
 
 export default function Dashboard() {
+  useNoIndex()
   const { user }                    = useAuth()
   const navigate                    = useNavigate()
   const [profile,   setProfile]     = useState(null)
