@@ -1420,3 +1420,106 @@ transition: background-color 0.3s ease;
     top: 415px;
 }
 } */
+
+/* ── Auth nav items ──────────────────────────────────────────────────────── */
+.nav-logout-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #290132;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0;
+  border-bottom: 2px solid transparent;
+  transition: all .55s ease;
+}
+.nav-logout-btn:hover {
+  border-bottom: 2px solid #290132;
+}
+.nav-user-link {
+  font-size: 12px !important;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+/* On mobile the navlist is dark, override logout btn color */
+@media (max-width: 990px) {
+  .nav-logout-btn { color: white; }
+  .nav-logout-btn:hover { border-bottom: 2px solid white; }
+}
+
+/* ── Auth forms (login / signup) ─────────────────────────────────────────── */
+.auth-form {
+  margin: auto;
+  margin-top: 7em;
+  width: 90%;
+  max-width: 440px;
+  border-radius: 30px;
+  border: solid 1px #D1C5F4;
+  padding: 5% 7%;
+  padding-top: 0;
+}
+.auth-form h1 {
+  font-family: "Italianno", cursive;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 80px;
+  color: #290132;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.auth-field {
+  margin-bottom: 12px;
+}
+.auth-submit {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+.auth-error {
+  color: #a21820;
+  font-size: 13px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.auth-switch {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #290132;
+}
+.auth-switch a {
+  color: #290132;
+  font-weight: 600;
+  border-bottom: 1px solid #290132;
+}
+.btn-google {
+  width: 100%;
+  height: 3em;
+  background: white;
+  border: 1px solid #D1C5F4;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  color: #290132;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  transition: all .3s ease;
+}
+.btn-google:hover {
+  background: #F5F2FF;
+  border-color: #290132;
+}
+.btn-google:disabled,
+.auth-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
