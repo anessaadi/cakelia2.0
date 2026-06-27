@@ -1421,6 +1421,197 @@ transition: background-color 0.3s ease;
 }
 } */
 
+/* -- Nav avatar & dropdown ------------------------------------------------- */
+.nav-auth-desktop {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+.nav-avatar-wrap { position: relative; }
+.nav-avatar-btn {
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .2s;
+  width: 40px;
+  height: 40px;
+}
+.nav-avatar-btn:hover { border-color: #290132; }
+.nav-avatar-initials {
+  border-radius: 50%;
+  background: #290132;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  flex-shrink: 0;
+}
+.nav-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  background: white;
+  border: 1px solid #D1C5F4;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(41,1,50,.12);
+  min-width: 190px;
+  overflow: hidden;
+  z-index: 1000;
+}
+.nav-dropdown-email {
+  padding: 12px 16px 8px;
+  font-size: 11px;
+  color: #aaa;
+  word-break: break-all;
+  border-bottom: 1px solid #eee;
+}
+.nav-dropdown-divider { border: none; border-top: 1px solid #eee; margin: 0; }
+.nav-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 11px 16px;
+  font-size: 14px;
+  color: #290132;
+  text-decoration: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s;
+}
+.nav-dropdown-item:hover { background: #F5F2FF; }
+.nav-dropdown-item--danger { color: #a21820 !important; }
+.nav-dropdown-item--danger:hover { background: #fff5f5 !important; }
+
+/* Delete-account confirmation panel inside dropdown */
+.nav-dropdown-confirm {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nav-dropdown-confirm-msg {
+  font-size: 12px;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+.nav-dropdown-confirm-error {
+  font-size: 11px;
+  color: #a21820;
+  margin: 0;
+}
+.nav-dropdown-danger-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: #a21820;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .2s;
+}
+.nav-dropdown-danger-btn:hover { background: #7d1118; }
+.nav-dropdown-danger-btn:disabled { opacity: .6; cursor: not-allowed; }
+.nav-login-desktop {
+  font-size: 14px;
+  font-weight: 600;
+  color: #290132;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color .2s;
+}
+.nav-login-desktop:hover { border-bottom-color: #290132; }
+
+/* Nav CTA pill */
+.nav-cta {
+  background: #290132;
+  color: white !important;
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  border-bottom: none !important;
+  display: inline-block;
+  transition: background .2s;
+}
+.nav-cta:hover {
+  background: #55006e !important;
+  border-bottom: none !important;
+}
+
+/* Mobile: hide desktop auth, show items inside hamburger */
+.nav-mobile-only { display: none; }
+@media (max-width: 990px) {
+  .nav-auth-desktop { display: none; }
+  .nav-mobile-only  { display: list-item; }
+  .nav-cta {
+    background: white !important;
+    color: #290132 !important;
+  }
+  .nav-cta:hover { background: #F5F2FF !important; }
+}
+
+/* -- Profile photo (dashboard) --------------------------------------------- */
+.profile-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255,255,255,.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  border: 3px solid rgba(255,255,255,.4);
+  padding: 0;
+  transition: border-color .2s;
+}
+.profile-avatar:hover { border-color: rgba(255,255,255,.9); }
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.profile-avatar-initials {
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  line-height: 1;
+}
+.profile-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .2s;
+  border-radius: 50%;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+.profile-avatar:hover .profile-avatar-overlay,
+.profile-avatar:disabled .profile-avatar-overlay { opacity: 1; }
+
 /* ── Auth nav items ──────────────────────────────────────────────────────── */
 .nav-logout-btn {
   background: none;
@@ -1623,41 +1814,88 @@ transition: background-color 0.3s ease;
 
 /* ── Dashboard ───────────────────────────────────────────────────────────── */
 .dashboard {
-  max-width: 720px;
+  max-width: 760px;
   margin: 7em auto 4em;
   padding: 0 24px;
   font-family: "Poppins", sans-serif;
 }
-.dashboard-title {
-  font-family: "Italianno", cursive;
-  font-weight: 500;
-  font-style: italic;
-  font-size: 80px;
-  color: #290132;
-  margin-bottom: 0;
-  line-height: 1;
+.dash-profile-card {
+  background: linear-gradient(135deg, #290132 0%, #55006e 100%);
+  border-radius: 24px;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
 }
-.dashboard-email {
-  font-size: 13px;
-  color: #888;
-  margin: 4px 0 12px;
+.dash-profile-avatar-col {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.dashboard-tz {
+.dash-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+.dash-profile-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,.55);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin: 0 0 4px;
+}
+.dash-profile-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 2px;
+}
+.dash-profile-email {
+  font-size: 15px;
+  color: rgba(255,255,255,.8);
+  margin: 0 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dash-profile-tz {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #555;
-  margin-bottom: 24px;
+  color: rgba(255,255,255,.65);
   flex-wrap: wrap;
 }
-.tz-input {
-  width: auto !important;
-  max-width: 220px;
-  padding: 4px 8px !important;
-  height: auto !important;
-  font-size: 13px;
+.tz-label-text {
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
 }
+.tz-select {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.3);
+  color: white;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  max-width: 220px;
+  outline: none;
+  transition: border-color .2s;
+}
+.tz-select:hover,
+.tz-select:focus { border-color: rgba(255,255,255,.7); }
+.tz-select:disabled { opacity: .6; cursor: not-allowed; }
+.tz-select option { color: #290132; background: white; }
+.tz-status {
+  font-size: 12px;
+  color: rgba(255,255,255,.6);
+  white-space: nowrap;
+}
+.tz-status--saved { color: #86efac; }
 .tz-btn {
   background: none;
   border: none;
@@ -1669,15 +1907,32 @@ transition: background-color 0.3s ease;
   padding: 0;
 }
 .tz-btn:disabled { opacity: .5; cursor: not-allowed; }
+.photo-error-msg {
+  color: #ffb3b3;
+  font-size: 11px;
+  margin: 6px 0 0;
+  text-align: center;
+  max-width: 96px;
+}
 .add-friend-btn {
   margin-bottom: 20px;
   width: auto;
   padding: 0 20px;
 }
-.dashboard-empty {
+.dash-empty-state {
+  text-align: center;
+  padding: 48px 16px;
+}
+.dash-empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+  margin: 0 0 6px;
+}
+.dash-empty-sub {
+  font-size: 13px;
   color: #aaa;
-  font-size: 14px;
-  margin-top: 24px;
+  margin: 0;
 }
 
 /* ── Friend list ─────────────────────────────────────────────────────────── */
@@ -1805,12 +2060,13 @@ transition: background-color 0.3s ease;
 /* -- Dashboard tabs -------------------------------------------------------- */
 .dash-tabs {
   display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #D1C5F4;
-  padding-bottom: 0;
+  background: #F5F2FF;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 24px;
 }
 .dash-tab {
+  flex: 1;
   background: none;
   border: none;
   cursor: pointer;
@@ -1818,16 +2074,21 @@ transition: background-color 0.3s ease;
   font-size: 14px;
   font-weight: 500;
   color: #888;
-  padding: 8px 16px;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color .2s, border-color .2s;
+  padding: 9px 16px;
+  border-radius: 8px;
+  transition: all .2s;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 .dash-tab:hover { color: #290132; }
-.dash-tab--active { color: #290132; border-bottom-color: #290132; }
+.dash-tab--active {
+  background: white;
+  color: #290132;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(41,1,50,.18);
+}
 .dash-badge {
   background: #290132;
   color: white;
@@ -1874,7 +2135,9 @@ transition: background-color 0.3s ease;
 
 @media (max-width: 600px) {
   .dashboard { margin-top: 5em; }
-  .dashboard-title { font-size: 56px; }
+  .dash-profile-card { flex-direction: column; padding: 24px 20px; text-align: center; }
+  .dash-profile-info { display: flex; flex-direction: column; align-items: center; }
+  .dash-profile-tz { justify-content: center; }
   .friend-form-bday { flex-direction: column; }
   .friend-form-bday .input-contact { width: 100%; }
   .friend-row { flex-direction: column; }

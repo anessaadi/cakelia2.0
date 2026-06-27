@@ -13,15 +13,17 @@ import { ensureUserDoc } from './userDoc'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser]       = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user,      setUser]      = useState(null)
+  const [loading,   setLoading]   = useState(true)
+  const [avatarUrl, setAvatarUrl] = useState(null)
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async u => {
       if (u) {
-        // Create the Firestore profile doc on first-ever login.
-        // Fire-and-forget — a failure here must not block the app.
         ensureUserDoc(u).catch(err => console.error('ensureUserDoc:', err))
+        setAvatarUrl(u.photoURL || null)
+      } else {
+        setAvatarUrl(null)
       }
       setUser(u)
       setLoading(false)
@@ -29,13 +31,16 @@ export function AuthProvider({ children }) {
     return unsub
   }, [])
 
-  const signUp          = (email, pw) => createUserWithEmailAndPassword(auth, email, pw)
-  const signIn          = (email, pw) => signInWithEmailAndPassword(auth, email, pw)
-  const signInWithGoogle = ()         => signInWithPopup(auth, new GoogleAuthProvider())
-  const logOut          = ()          => signOut(auth)
+  const signUp           = (email, pw) => createUserWithEmailAndPassword(auth, email, pw)
+  const signIn           = (email, pw) => signInWithEmailAndPassword(auth, email, pw)
+  const signInWithGoogle = ()          => signInWithPopup(auth, new GoogleAuthProvider())
+  const logOut           = ()          => signOut(auth)
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signInWithGoogle, logOut }}>
+    <AuthContext.Provider value={{
+      user, loading, avatarUrl, setAvatarUrl,
+      signUp, signIn, signInWithGoogle, logOut,
+    }}>
       {children}
     </AuthContext.Provider>
   )
