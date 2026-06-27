@@ -1,4 +1,7 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
+import { useAuth } from './lib/AuthContext'
+import Preloader from './components/Preloader'
 import Home from './pages/Home'
 import CakePreview from './pages/CakePreview'
 import Blogs from './pages/Blogs'
@@ -17,8 +20,21 @@ import CookieNotice from './components/CookieNotice'
 import Footer from './components/Footer'
 
 export default function App() {
+  const { loading }                       = useAuth()
+  const [showPreloader, setShowPreloader] = useState(true)
+  const [preloaderOn,   setPreloaderOn]   = useState(true)
+
+  useEffect(() => {
+    if (!loading) {
+      setPreloaderOn(false)
+      const id = setTimeout(() => setShowPreloader(false), 500)
+      return () => clearTimeout(id)
+    }
+  }, [loading])
+
   return (
     <>
+      {showPreloader && <Preloader visible={preloaderOn} />}
       <Routes>
         {/* ── Public ─────────────────────────────────────── */}
         <Route path="/"            element={<Home />} />
